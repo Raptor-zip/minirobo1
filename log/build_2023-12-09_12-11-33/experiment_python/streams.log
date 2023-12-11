@@ -1,0 +1,31 @@
+[0.711s] Invoking command in '/home/kaibuchisoma/test_ws/src/experiment_python': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed
+[0.925s] running egg_info
+[0.926s] writing ../../build/experiment_python/experiment_python.egg-info/PKG-INFO
+[0.926s] writing dependency_links to ../../build/experiment_python/experiment_python.egg-info/dependency_links.txt
+[0.926s] writing entry points to ../../build/experiment_python/experiment_python.egg-info/entry_points.txt
+[0.926s] writing requirements to ../../build/experiment_python/experiment_python.egg-info/requires.txt
+[0.926s] writing top-level names to ../../build/experiment_python/experiment_python.egg-info/top_level.txt
+[0.928s] reading manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[0.929s] writing manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[0.929s] running build
+[0.929s] running build_py
+[0.929s] copying experiment_python/communicateWiFiUDP_ESP32.py -> /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python
+[0.930s] running install
+[0.930s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.930s]   warnings.warn(
+[0.931s] running install_lib
+[0.932s] copying /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python/communicateWiFiUDP_ESP32.py -> /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python
+[0.933s] byte-compiling /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python/communicateWiFiUDP_ESP32.py to communicateWiFiUDP_ESP32.cpython-310.pyc
+[0.934s] running install_data
+[0.934s] running install_egg_info
+[0.936s] removing '/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info' (and everything under it)
+[0.936s] Copying ../../build/experiment_python/experiment_python.egg-info to /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info
+[0.937s] running install_scripts
+[0.952s] Installing Collect_Controller script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.952s] Installing Drive_Controller script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.952s] Installing communicateWebSockets_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.952s] Installing communicateWiFiUDP_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.953s] Installing communicateWiFi_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.953s] Installing webserver script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.953s] writing list of installed files to '/home/kaibuchisoma/test_ws/build/experiment_python/install.log'
+[0.970s] Invoked command in '/home/kaibuchisoma/test_ws/src/experiment_python' returned '0': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed

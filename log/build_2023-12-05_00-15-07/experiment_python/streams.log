@@ -1,0 +1,27 @@
+[0.820s] Invoking command in '/home/kaibuchisoma/test_ws/src/experiment_python': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed
+[1.063s] running egg_info
+[1.064s] writing ../../build/experiment_python/experiment_python.egg-info/PKG-INFO
+[1.064s] writing dependency_links to ../../build/experiment_python/experiment_python.egg-info/dependency_links.txt
+[1.064s] writing entry points to ../../build/experiment_python/experiment_python.egg-info/entry_points.txt
+[1.064s] writing requirements to ../../build/experiment_python/experiment_python.egg-info/requires.txt
+[1.064s] writing top-level names to ../../build/experiment_python/experiment_python.egg-info/top_level.txt
+[1.066s] reading manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[1.066s] writing manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[1.067s] running build
+[1.067s] running build_py
+[1.067s] copying experiment_python/serial_flask.py -> /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python
+[1.067s] running install
+[1.067s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[1.067s]   warnings.warn(
+[1.067s] running install_lib
+[1.068s] copying /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python/serial_flask.py -> /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python
+[1.069s] byte-compiling /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python/serial_flask.py to serial_flask.cpython-310.pyc
+[1.070s] running install_data
+[1.071s] running install_egg_info
+[1.072s] removing '/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info' (and everything under it)
+[1.072s] Copying ../../build/experiment_python/experiment_python.egg-info to /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info
+[1.073s] running install_scripts
+[1.091s] Installing joypub script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[1.091s] Installing serifla script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[1.092s] writing list of installed files to '/home/kaibuchisoma/test_ws/build/experiment_python/install.log'
+[1.115s] Invoked command in '/home/kaibuchisoma/test_ws/src/experiment_python' returned '0': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed

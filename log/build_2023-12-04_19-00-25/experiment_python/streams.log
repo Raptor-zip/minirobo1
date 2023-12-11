@@ -1,0 +1,27 @@
+[0.663s] Invoking command in '/home/kaibuchisoma/test_ws/src/experiment_python': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed
+[0.873s] running egg_info
+[0.873s] writing ../../build/experiment_python/experiment_python.egg-info/PKG-INFO
+[0.873s] writing dependency_links to ../../build/experiment_python/experiment_python.egg-info/dependency_links.txt
+[0.873s] writing entry points to ../../build/experiment_python/experiment_python.egg-info/entry_points.txt
+[0.873s] writing requirements to ../../build/experiment_python/experiment_python.egg-info/requires.txt
+[0.873s] writing top-level names to ../../build/experiment_python/experiment_python.egg-info/top_level.txt
+[0.875s] reading manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[0.875s] writing manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[0.875s] running build
+[0.876s] running build_py
+[0.876s] copying experiment_python/joysub.py -> /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python
+[0.876s] running install
+[0.876s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.876s]   warnings.warn(
+[0.876s] running install_lib
+[0.877s] copying /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python/joysub.py -> /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python
+[0.877s] byte-compiling /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python/joysub.py to joysub.cpython-310.pyc
+[0.878s] running install_data
+[0.878s] running install_egg_info
+[0.879s] removing '/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info' (and everything under it)
+[0.880s] Copying ../../build/experiment_python/experiment_python.egg-info to /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info
+[0.880s] running install_scripts
+[0.896s] Installing joypub script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.896s] Installing serifla script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.896s] writing list of installed files to '/home/kaibuchisoma/test_ws/build/experiment_python/install.log'
+[0.917s] Invoked command in '/home/kaibuchisoma/test_ws/src/experiment_python' returned '0': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed

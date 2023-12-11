@@ -1,0 +1,11 @@
+<h1>WebSockets Test</h1>
+
+<script>
+  var ws;
+  ws = new WebSocket("ws://localhost:8080/websocket");
+  ws.onmessage = function (ev) {
+    document.getElementById("variable").innerHTML = ev.data;
+  };
+</script>
+
+variable : <span id="variable">default</span>

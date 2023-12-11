@@ -1,0 +1,29 @@
+[0.726s] Invoking command in '/home/kaibuchisoma/test_ws/src/experiment_python': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed
+[0.954s] running egg_info
+[0.954s] writing ../../build/experiment_python/experiment_python.egg-info/PKG-INFO
+[0.955s] writing dependency_links to ../../build/experiment_python/experiment_python.egg-info/dependency_links.txt
+[0.955s] writing entry points to ../../build/experiment_python/experiment_python.egg-info/entry_points.txt
+[0.955s] writing requirements to ../../build/experiment_python/experiment_python.egg-info/requires.txt
+[0.955s] writing top-level names to ../../build/experiment_python/experiment_python.egg-info/top_level.txt
+[0.956s] reading manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[0.961s] writing manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[0.962s] running build
+[0.962s] running build_py
+[0.962s] copying experiment_python/Collect_Controller.py -> /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python
+[0.962s] running install
+[0.962s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.963s]   warnings.warn(
+[0.963s] running install_lib
+[0.963s] copying /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python/Collect_Controller.py -> /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python
+[0.964s] byte-compiling /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python/Collect_Controller.py to Collect_Controller.cpython-310.pyc
+[0.965s] running install_data
+[0.965s] running install_egg_info
+[0.966s] removing '/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info' (and everything under it)
+[0.966s] Copying ../../build/experiment_python/experiment_python.egg-info to /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info
+[0.967s] running install_scripts
+[0.983s] Installing Collect_Controller script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.983s] Installing Drive_Controller script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.983s] Installing communicateWiFi_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.983s] Installing webserver script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.984s] writing list of installed files to '/home/kaibuchisoma/test_ws/build/experiment_python/install.log'
+[1.001s] Invoked command in '/home/kaibuchisoma/test_ws/src/experiment_python' returned '0': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed

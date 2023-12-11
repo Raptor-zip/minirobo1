@@ -1,0 +1,8 @@
+[console_scripts]
+Collect_Controller = experiment_python.Collect_Controller:main
+Drive_Controller = experiment_python.Drive_Controller:main
+communicateWebSockets_ESP32 = experiment_python.communicateWebSockets_ESP32:main
+communicateWiFiUDP_ESP32 = experiment_python.communicateWiFiUDP_ESP32:main
+communicateWiFi_ESP32 = experiment_python.communicateWiFi_ESP32:main
+webserver = experiment_python.webserver:main
+
