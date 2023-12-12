@@ -44,10 +44,12 @@ class MinimalSubscriber(Node):
 
     def listener_callback_joy(self, joy):
         # buttons[10] ホームボタン スタートボタン
-        # 8 戻るボタン
-        # 9 進むボタン
-        # 4 L 手動操縦
-        # 5 R 自動操縦
+
+        # 15 従事左で左回転
+        # 16 従事右で右回転
+        # 7 ZRでまっすぐ 距離センサー監視しながら
+        # 6 ZLで、旋回中でも、前進中でも、とまる
+        # 2 Xで回収機構モーター回転のオンオフ切り替え
 
         msg = Int16MultiArray()
         msg.data = [int(joy.axes[1]*256),int(joy.axes[3]*256)]
@@ -79,20 +81,7 @@ class MinimalSubscriber(Node):
         elif self.state == 3:
             # エリア1で右旋回中
             # 0°になるまで右旋回
-            if self.angle == 0:
-                pub_msg.data = self.state+1
-                self.publisher_state.publish(msg)
-            else:
-                y = self.angle            # 出力を取得。例:センサー情報を読み取る処理
-                r = 0                     # 目標値を取得。目標値が一定ならその値を代入する
-                e  = r - y                # 誤差を計算
-                de = (e - e_pre)/self.T        # 誤差の微分を近似計算
-                ie = ie + (e + e_pre)*self.T/2 # 誤差の積分を近似計算
-                u  = self.KP*e + self.KI*ie + self.KD*de # PID制御の式にそれぞれを代入
-                e_pre = e
 
-                self.motor1_speed = u*255
-                self.motor2_speed = u*255 * -1
 
 
 

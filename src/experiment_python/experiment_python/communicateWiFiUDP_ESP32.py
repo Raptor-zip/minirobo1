@@ -3,11 +3,12 @@ from rclpy.node import Node
 from std_msgs.msg import Int16MultiArray
 from std_msgs.msg import UInt8 # state用
 from std_msgs.msg import String
+from sensor_msgs.msg import Joy
 import json # jsonを使うため
 from concurrent.futures import ThreadPoolExecutor # threadPoolExecutor
 import playsound
-import asyncio
 import time
+import datetime
 motor_speed=[0,0,0,0]
 reception_json = {
     "raw_distance":0,
@@ -48,7 +49,7 @@ print(f"Listening for UDP packets on 0.0.0.0:{local_port}", flush=True)
 
 def main():
     with ThreadPoolExecutor(max_workers=3) as executor:
-        executor.submit(udp_reception)
+        # executor.submit(udp_reception)
         executor.submit(battery_alert)
         future = executor.submit(ros)
         future.result()         # 全てのタスクが終了するまで待つ
@@ -95,13 +96,34 @@ def ros(args=None):
     rclpy.shutdown()
 
 class MinimalSubscriber(Node):
-    state = 1
+    state = 0
+    assist_enable = False
+    collection_enabled = False
     motor1_speed = 0
     motor2_speed = 0
     motor3_speed = 0
     motor4_speed = 0
+    distance = 400 #あとで0に変えておいて
     boolean_distance = False
     boolean_angle = False
+
+    axes_1 = 0
+    axes_3 = 0
+
+    buttons_ZR = 0
+    buttons_ZL= 0
+    buttons_X=0
+    buttons_left=0
+    buttons_right=0
+
+    state2_start_time = 0
+    state3_start_time = 0
+
+    # 15 従事左で左回転
+# 16 従事右で右回転
+# 7 ZRでまっすぐ 距離センサー監視しながら
+# 6 ZLで、旋回中でも、前進中でも、とまる
+# 2 Xで回収機構モーター回転のオンオフ切り替え
 
     def __init__(self):
         global reception_json
@@ -110,19 +132,9 @@ class MinimalSubscriber(Node):
         self.publisher_ESP32_to_Webserver = self.create_publisher(String, 'ESP32_to_Webserver', 10)
         self.publisher_state_sensor = self.create_publisher(Int16MultiArray, 'state_sensor', 10)
         self.subscription = self.create_subscription(
-            Int16MultiArray,
-            "Drive_Controller_Node",
-            self.Drive_listener_callback,
-            10)
-        self.subscription = self.create_subscription(
-            Int16MultiArray,
-            "Collect_Controller_Node",
-            self.Collect_listener_callback,
-            10)
-        self.subscription = self.create_subscription(
-            UInt8,
-            "state",
-            self.state_listener_callback,
+            Joy,
+            "joy",
+            self.joy_listener_callback,
             10)
         self.subscription  # prevent unused variable warning
 
@@ -134,42 +146,119 @@ class MinimalSubscriber(Node):
         global motor_speed
         global reception_json
 
-        msg = Int16MultiArray()
-        msg.data = [self.state,reception_json["distance"],reception_json["angle"]]
-        self.publisher_state_sensor.publish(msg)
+        # msg = Int16MultiArray()
+        # msg.data = [self.state, reception_json["raw_distance"], reception_json["raw_angle"]]
+        # self.publisher_state_sensor.publish(msg)
 
-        serialCommand = f"{{'motor1':{{'speed':{self.motor1_speed}}},'motor2':{{'speed':{self.motor2_speed}}},'motor3':{{'speed':{self.motor3_speed}}},'motor4':{{'speed':{self.motor4_speed}}},'boolean_distance':{self.boolean_distance},'boolean_angle':{self.boolean_angle}}}\n"
+        # serialCommand = f"{{'motor1':{{'speed':{self.motor1_speed}}},'motor2':{{'speed':{self.motor2_speed}}},'motor3':{{'speed':{self.motor3_speed}}},'motor4':{{'speed':{self.motor4_speed}}},'boolean_distance':{self.boolean_distance},'boolean_angle':{self.boolean_angle}}}\n"
 
-        serialCommand = serialCommand.encode()
+        # serialCommand = serialCommand.encode()
 
-        # データをESP32に送信
-        udp_socket.sendto(serialCommand, (esp32_ip, esp32_port))
-        # print(f"Sent {esp32_ip}:{esp32_port} {serialCommand}",flush=True)
+        # # データをESP32に送信
+        # udp_socket.sendto(serialCommand, (esp32_ip, esp32_port))
+        # # print(f"Sent {esp32_ip}:{esp32_port} {serialCommand}",flush=True)
 
-        msg = String()
-        msg.data = json.dumps(reception_json)
-        self.publisher_ESP32_to_Webserver.publish(msg)
+        # msg = String()
+        # msg.data = json.dumps(reception_json)
+        # self.publisher_ESP32_to_Webserver.publish(msg)
+
+        if self.state == 1:
+            if self.distance > 45:
+                distance = self.distance * 5
+                if distance > 255:
+                    distance = 255
+                distance_1 = distance -  self.axes_3
+                if distance_1 > 255:
+                    distance_1 = 255
+                self.motor1_speed = distance_1
+                distance_2 =  distance - self.axes_1
+                if distance_2 > 255:
+                    distance_2 = 255
+                self.motor2_speed = distance_2
+            else:
+                self.motor1_speed = 0
+                self.motor2_speed = 0
+                self.state = 0
+
+        if self.state == 2:
+            if (time.time() - self.state2_start_time) < 1:
+                self.motor1_speed = 255 + self.axes_1
+                self.motor2_speed = -255 + self.axes_3
+            else:
+                self.motor1_speed = 0
+                self.motor2_speed = 0
+                self.state = 0
+
+        if self.state == 3:
+            if (time.time() - self.state3_start_time) < 1:
+                self.motor1_speed = -255 + self.axes_1
+                self.motor2_speed = 255 + self.axes_3
+            else:
+                self.motor1_speed = 0
+                self.motor2_speed = 0
+                self.state = 0
+
+        print("motor1 ",self.motor1_speed,flush=True)
+        print("motor2 ",self.motor2_speed,flush=True)
+        print("motor3 ",self.motor3_speed,flush=True)
+        # print(self.motor3_speed,flush=True)
+        print(self.state,flush=True)
+
+    def joy_listener_callback(self, joy):
+        self.axes_1 = int(joy.axes[1]*128)
+        self.axes_3 = int(joy.axes[3]*128)
+
+        if self.assist_enable == False:
+            # 走行補助がオフなら
+            self.motor1_speed = int(joy.axes[1]*256)
+            self.motor2_speed=int(joy.axes[3]*256)
 
 
+        if self.buttons_ZL == 0 and joy.buttons[6] == 1:
+            # オフにするだけでよくない？オンにする必要ある？^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            # assist_enableいらなくない？state=0でいい気がする
+            # 走行補助強制停止のオンオフ切り替え
+            self.state = 0
+            self.motor1_speed = 0
+            self.motor1_speed =0
+            self.motor3_speed=0
+            self.motor4_speed=0
+            if self.assist_enable == True:
+                self.assist_enable = False
+                self.state = 0
+            else:
+                self.assist_enable = True
 
-    def Drive_listener_callback(self, msg):
-        # self.get_logger().info('Received: {}'.format(msg.data))
-        self.motor1_speed = msg.data[0]
-        self.motor2_speed = msg.data[1]
-        self.motor3_speed = msg.data[2]
-        self.motor4_speed = msg.data[3]
+        if self.buttons_ZR == 0 and joy.buttons[7] == 1:
+            # 前進
+            self.state = 1
 
-    def Collect_listener_callback(self, msg):
-        # self.get_logger().info('Received: {}'.format(msg.data))
-        self.motor3_speed = msg.data[0]
-        self.motor4_speed = msg.data[1]
 
-    def state_listener_callback(self, msg):
-        global raw_distance, distance_deviation, raw_angle, angle_deviation
-        if self.state < msg.data:
-            self.state = msg.data
-            if self.state == 2:
-                angle_deviation = -90 - raw_angle # 90足すかも
+        if self.buttons_left == 0 and joy.buttons[15] == 1:
+            # 左旋回
+            self.state = 2
+            self.state2_start_time = time.time()
+
+        if self.buttons_right == 0 and joy.buttons[16] == 1:
+            # 右旋回
+            self.state = 3
+            self.state3_start_time = time.time()
+
+        if self.buttons_X == 0 and joy.buttons[2] == 1:
+            # 回収機構回転のオンオフ切り替え
+            if self.collection_enabled == False:
+                self.motor3_speed = 255
+                self.collection_enabled = True
+            else:
+                self.motor3_speed = 0
+                self.collection_enabled = False
+
+        self.buttons_ZR = joy.buttons[7]
+        self.buttons_ZL = joy.buttons[6]
+        self.buttons_X= joy.buttons[2]
+        self.buttons_left= joy.buttons[15]
+        self.buttons_right=joy.buttons[16]
+
 
 if __name__ == '__main__':
     main()

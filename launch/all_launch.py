@@ -33,10 +33,10 @@ def generate_launch_description():
                 # output="screen",
                 parameters=[{"device_id": 0}],
             ),
-            Node(
-                package="experiment_python",
-                executable="Drive_Controller",
-            ),
+            # Node(
+            #     package="experiment_python",
+            #     executable="Drive_Controller",
+            # ),
             # Node(
             #     package="experiment_python",
             #     executable="Collect_Controller",
