@@ -29,7 +29,7 @@ angle_deviation = 0
 import socket
 
 # ESP32のIPアドレスとポート番号
-esp32_ip = "192.168.160.78"
+esp32_ip = "192.168.20.241"
 esp32_port = 12345
 
 # UDPソケットの作成
@@ -49,7 +49,7 @@ print(f"Listening for UDP packets on 0.0.0.0:{local_port}", flush=True)
 
 def main():
     with ThreadPoolExecutor(max_workers=3) as executor:
-        # executor.submit(udp_reception)
+        executor.submit(udp_reception)
         executor.submit(battery_alert)
         future = executor.submit(ros)
         future.result()         # 全てのタスクが終了するまで待つ
@@ -103,9 +103,11 @@ class MinimalSubscriber(Node):
     motor2_speed = 0
     motor3_speed = 0
     motor4_speed = 0
+
     distance = 400 #あとで0に変えておいて
-    boolean_distance = False
-    boolean_angle = False
+    ultrasonic_sensor_right_front_adjust = -2.5 # パラメーター調整必要
+    ultrasonic_sensor_right_back_adjust = -8 # パラメーター調整必要
+    ultrasonic_sensor_left_back_adjust = -8 # パラメーター調整必要
 
     axes_1 = 0
     axes_3 = 0
@@ -146,66 +148,100 @@ class MinimalSubscriber(Node):
         global motor_speed
         global reception_json
 
-        # msg = Int16MultiArray()
-        # msg.data = [self.state, reception_json["raw_distance"], reception_json["raw_angle"]]
-        # self.publisher_state_sensor.publish(msg)
+        msg = Int16MultiArray()
+        msg.data = [self.state, reception_json["raw_distance"], reception_json["raw_angle"]]
+        self.publisher_state_sensor.publish(msg)
 
-        # serialCommand = f"{{'motor1':{{'speed':{self.motor1_speed}}},'motor2':{{'speed':{self.motor2_speed}}},'motor3':{{'speed':{self.motor3_speed}}},'motor4':{{'speed':{self.motor4_speed}}},'boolean_distance':{self.boolean_distance},'boolean_angle':{self.boolean_angle}}}\n"
+        serialCommand = f"{{'motor1':{{'speed':{int(self.motor1_speed)}}},'motor2':{{'speed':{int(self.motor2_speed)}}},'motor3':{{'speed':{int(self.motor3_speed)}}}}}\n"
 
-        # serialCommand = serialCommand.encode()
+        serialCommand = serialCommand.encode()
 
-        # # データをESP32に送信
-        # udp_socket.sendto(serialCommand, (esp32_ip, esp32_port))
-        # # print(f"Sent {esp32_ip}:{esp32_port} {serialCommand}",flush=True)
+        # データをESP32に送信
+        udp_socket.sendto(serialCommand, (esp32_ip, esp32_port))
+        print(f"Sent {esp32_ip}:{esp32_port} {serialCommand}",flush=True)
 
-        # msg = String()
-        # msg.data = json.dumps(reception_json)
-        # self.publisher_ESP32_to_Webserver.publish(msg)
+        msg = String()
+        msg.data = json.dumps(reception_json)
+        self.publisher_ESP32_to_Webserver.publish(msg)
 
         if self.state == 1:
+            # 前進
             if self.distance > 45:
                 distance = self.distance * 5
                 if distance > 255:
                     distance = 255
+
                 distance_1 = distance -  self.axes_3
                 if distance_1 > 255:
                     distance_1 = 255
                 self.motor1_speed = distance_1
+
                 distance_2 =  distance - self.axes_1
                 if distance_2 > 255:
                     distance_2 = 255
                 self.motor2_speed = distance_2
+
+                distance_difference = (reception_json["ultrasonic_sensor_right_front"]+self.ultrasonic_sensor_right_front_adjust) - (reception_json["ultrasonic_sensor_right_back"]+self.ultrasonic_sensor_right_back_adjust) # 前 - 後
+
+                if distance_difference > 0.2: # パラメーター調整必要
+                    # 壁と平行じゃないなら
+                    if (distance_difference > 0):
+                        # 前のほうが壁と遠いなら右を遅くする
+                        self.motor2_speed = self.motor2_speed - distance_difference * 5 # パラメーター調整必要
+                    else:
+                        # 後ろのほうが壁と遠いなら左を遅くする
+                        self.motor1_speed = self.motor1_speed - distance_difference * 5 # パラメーター調整必要
+
+                if reception_json["ultrasonic_sensor_left_back"]+self.ultrasonic_sensor_left_back_adjust > 2.5: # パラメーター調整必要
+                    # 左の壁と遠いなら、左を遅くする
+                    self.motor1_speed = self.motor1_speed - 20 # パラメーター調整必要
+
+
             else:
                 self.motor1_speed = 0
                 self.motor2_speed = 0
                 self.state = 0
 
         if self.state == 2:
-            if (time.time() - self.state2_start_time) < 1:
-                self.motor1_speed = 255 + self.axes_1
-                self.motor2_speed = -255 + self.axes_3
+            # 左旋回
+            # if (reception_json["ultrasonic_sensor_right_front"]+self.ultrasonic_sensor_right_front_adjust) - (reception_json["ultrasonic_sensor_right_back"]+self.ultrasonic_sensor_right_back_adjust) > 0.2: # パラメーター調整必要
+            if (time.time() - self.state2_start_time) < 1: # パラメーター調整必要
+                self.motor1_speed = 255 -  self.axes_3
+                if self.motor1_speed > 255:
+                    self.motor1_speed = 255
+
+                self.motor2_speed =  -255 + self.axes_1
+                if self.motor2_speed < -255:
+                    self.motor2_speed = -255
             else:
                 self.motor1_speed = 0
                 self.motor2_speed = 0
                 self.state = 0
 
         if self.state == 3:
-            if (time.time() - self.state3_start_time) < 1:
-                self.motor1_speed = -255 + self.axes_1
-                self.motor2_speed = 255 + self.axes_3
+            # 右旋回
+            # if (reception_json["ultrasonic_sensor_left_back"]+self.ultrasonic_sensor_left_back_adjust) > 2.5: # パラメーター調整必要
+            if (time.time() - self.state3_start_time) < 1: # パラメーター調整必要
+                self.motor1_speed = -255 + self.axes_3
+                if self.motor1_speed < -255:
+                    self.motor1_speed = -255
+
+                self.motor2_speed =  255 - self.axes_1
+                if self.motor2_speed > 255:
+                    self.motor2_speed = 255
             else:
                 self.motor1_speed = 0
                 self.motor2_speed = 0
                 self.state = 0
 
-        print("motor1 %d",self.motor1_speed,flush=True)
-        print("motor2 %d",self.motor2_speed,flush=True)
-        # print(self.motor3_speed,flush=True)
-        print(self.state,flush=True)
+        # print("motor1 ",self.motor1_speed,flush=True)
+        # print("motor2 ",self.motor2_speed,flush=True)
+        # print("motor3 ",self.motor3_speed,flush=True)
+        # print(self.state,flush=True)
 
     def joy_listener_callback(self, joy):
-        self.axes_1 = int(joy.axes[1]*128)
-        self.axes_3 = int(joy.axes[3]*128)
+        self.axes_1 = int(joy.axes[1]*64)
+        self.axes_3 = int(joy.axes[3]*64)
 
         if self.assist_enable == False:
             # 走行補助がオフなら
@@ -214,17 +250,22 @@ class MinimalSubscriber(Node):
 
 
         if self.buttons_ZL == 0 and joy.buttons[6] == 1:
+            # オフにするだけでよくない？オンにする必要ある？^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            # assist_enableいらなくない？state=0でいい気がする
             # 走行補助強制停止のオンオフ切り替え
             self.state = 0
             self.motor1_speed = 0
-            self.motor1_speed =0
+            self.motor2_speed =0
             self.motor3_speed=0
             self.motor4_speed=0
-            if self.assist_enable == True:
-                self.assist_enable = False
-                self.state = 0
-            else:
-                self.assist_enable = True
+
+            self.assist_enable = False
+
+            # if self.assist_enable == True:
+            #     self.assist_enable = False
+            #     self.state = 0
+            # else:
+            #     self.assist_enable = True
 
         if self.buttons_ZR == 0 and joy.buttons[7] == 1:
             # 前進
@@ -243,6 +284,7 @@ class MinimalSubscriber(Node):
 
         if self.buttons_X == 0 and joy.buttons[2] == 1:
             # 回収機構回転のオンオフ切り替え
+            # オンオフだと詰まったときに困るからジョイスティック2台目にする？!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if self.collection_enabled == False:
                 self.motor3_speed = 255
                 self.collection_enabled = True

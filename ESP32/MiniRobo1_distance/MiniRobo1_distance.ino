@@ -22,7 +22,7 @@ int every50thExecution=0;
 
 const char* ssid = "明志-2g";
 const char* password = "nitttttc";
-const char* python_ip = "192.168.160.68";
+const char* python_ip = "192.168.20.68";
 const int python_port = 12346;
 
 //本体裏側　0x78に接続→0x3C 0x7A→0x3A
@@ -54,7 +54,7 @@ float ultrasonic_sensor_left_back = 0;
 const int ultrasonic_sensor_left_back_PIN = 23;
 int tof_sensor = 0;
 
-String jsonString = "{}"
+String jsonString = "{}";
 
 void setup(){
   pinMode(LED_BUILTIN, OUTPUT);
@@ -149,10 +149,6 @@ void loop() {
       // Serial.println(String(doc["motor3"]["speed"].as<float>()));
       PWM(3, doc["motor3"]["speed"]);
     }
-    if (doc.containsKey("motor4")) {
-      // Serial.println(String(doc["motor4"]["speed"].as<float>()));
-      PWM(4, doc["motor4"]["speed"]);
-    }
 
     // const char* motor1 = doc["motor1"];
 
@@ -191,14 +187,14 @@ void loop() {
 
   if (low_battery_voltage == true) {
     if (temp > 100) {
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 3; i++) {
         digitalWrite(PIN_array[i].INA, HIGH);
         digitalWrite(PIN_array[i].INB, HIGH);
       }
     }
   }
 
-  float duration;
+  float duration=0;
   pinMode(ultrasonic_sensor_right_front_PIN, OUTPUT);
   digitalWrite(ultrasonic_sensor_right_front_PIN, LOW);
   delayMicroseconds(2);
@@ -206,9 +202,9 @@ void loop() {
   delayMicroseconds(5);
   digitalWrite(ultrasonic_sensor_right_front_PIN, LOW);
   pinMode(ultrasonic_sensor_right_front_PIN, INPUT);
-  duration = pulseIn(ultrasonic_sensor_right_front_PIN, HIGH);
+  duration = pulseIn(ultrasonic_sensor_right_front_PIN, HIGH, 1000);
   ultrasonic_sensor_right_front = duration / 58.2;
-  Serial.println(ultrasonic_sensor_right_front);
+  // Serial.println(ultrasonic_sensor_right_front);
 
   delay(1);
 
@@ -219,9 +215,9 @@ void loop() {
   delayMicroseconds(5);
   digitalWrite(ultrasonic_sensor_right_back_PIN, LOW);
   pinMode(ultrasonic_sensor_right_back_PIN, INPUT);
-  duration = pulseIn(ultrasonic_sensor_right_back_PIN, HIGH);
+  duration = pulseIn(ultrasonic_sensor_right_back_PIN, HIGH, 1000);
   ultrasonic_sensor_right_back = duration / 58.2;
-  Serial.println(ultrasonic_sensor_right_back);
+  // Serial.println(ultrasonic_sensor_right_back);
 
   delay(1);
 
@@ -232,12 +228,12 @@ void loop() {
   delayMicroseconds(5);
   digitalWrite(ultrasonic_sensor_left_back_PIN, LOW);
   pinMode(ultrasonic_sensor_left_back_PIN, INPUT);
-  duration = pulseIn(ultrasonic_sensor_left_back_PIN, HIGH);
+  duration = pulseIn(ultrasonic_sensor_left_back_PIN, HIGH, 1000);
   ultrasonic_sensor_left_back = duration / 58.2;
-  Serial.println(ultrasonic_sensor_left_back);
+  // Serial.println(ultrasonic_sensor_left_back);
 
   udp.beginPacket(python_ip, python_port);
-  jsonString = "{\"ultrasonic_sensor_right_front\":" + String(ultrasonic_sensor_right_front, 2) + ",\"ultrasonic_sensor_right_back_PIN\":" + String(ultrasonic_sensor_right_back_PIN, 2) +",\"ultrasonic_sensor_left_back_PIN\":" + String(ultrasonic_sensor_left_back,2)+"}";
+  jsonString = "{\"ultrasonic_sensor_right_front\":" + String(ultrasonic_sensor_right_front, 2) + ",\"ultrasonic_sensor_right_back\":" + String(ultrasonic_sensor_right_back, 2) +",\"ultrasonic_sensor_left_back\":" + String(ultrasonic_sensor_left_back,2)+"}";
   udp.print(jsonString);
   udp.endPacket();
 
@@ -264,7 +260,7 @@ void PWM(int motor_id, int duty) {
   } else {
     temp = temp +1;
     if (temp > 100) {
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 3; i++) {
         digitalWrite(PIN_array[i].INA, HIGH);
         digitalWrite(PIN_array[i].INB, HIGH);
       }
