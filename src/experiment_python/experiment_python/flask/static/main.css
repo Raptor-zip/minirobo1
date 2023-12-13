@@ -15,54 +15,53 @@ html,body {
     color: #111111;
 }
 
-#grid{
+.container {
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-columns:60% 40%;
-    grid-template-rows:60% 40%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        "robot controller"
+        "robot UDP_reception"
+        "robot Timer";
 }
 
-.change_inputnumber_range_grid{
-    display: grid;
-    grid-template-columns: 5em 1em auto 3em;
-    grid-template-rows: auto;
+.robot {
+    grid-area: robot;
+        width: calc(100%-1rem);
+            height: calc(100%-1rem);
+            margin: 1rem;
+            padding: 0.5em;
+            background-color: #444444;
 }
 
-#communicate{
-    width: calc(100%-1rem);
-    height: calc(100%-1rem);
-    margin: 1rem;
-    padding: 0.5em;
-    background-color: #444444;
+.controller {
+    grid-area: controller;
+        width: calc(100%-1rem);
+            height: calc(100%-1rem);
+            margin: 1rem;
+            padding: 0.5em;
+            background-color: #444444;
 }
 
-#joy {
-    width: calc(100%-1rem);
-    height: calc(100%-1rem);
-    margin: 1rem;
-    padding: 0.5em;
-    background-color: #444444;
+.UDP_reception {
+    grid-area: UDP_reception;
+        width: calc(100%-1rem);
+            height: calc(100%-1rem);
+            margin: 1rem;
+            padding: 0.5em;
+            background-color: #444444;
 }
 
-#serial_monitor{
-    width: calc(100%-1rem);
-    height: calc(100%-1rem);
-    margin: 1rem;
-    margin-left: 0;
-    padding: 0.5em;
-    background-color: #444444;
-    grid-row: 1 / 3;
-    grid-column: 2/3;
-}
-#result{
-    width: 100%;
-    height: 88vh;
-    overflow-y: scroll;
-}
-
-input[type="number"] {
-    background-color: #404040;
+.Timer {
+    grid-area: Timer;
+        width: calc(100%-1rem);
+            height: calc(100%-1rem);
+            margin: 1rem;
+            padding: 0.5em;
+            background-color: #444444;
 }
 
 input[type="range"] {

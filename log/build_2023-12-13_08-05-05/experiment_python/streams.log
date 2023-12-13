@@ -1,0 +1,36 @@
+[0.725s] Invoking command in '/home/kaibuchisoma/test_ws/src/experiment_python': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed
+[0.941s] running egg_info
+[0.941s] writing ../../build/experiment_python/experiment_python.egg-info/PKG-INFO
+[0.941s] writing dependency_links to ../../build/experiment_python/experiment_python.egg-info/dependency_links.txt
+[0.942s] writing entry points to ../../build/experiment_python/experiment_python.egg-info/entry_points.txt
+[0.942s] writing requirements to ../../build/experiment_python/experiment_python.egg-info/requires.txt
+[0.942s] writing top-level names to ../../build/experiment_python/experiment_python.egg-info/top_level.txt
+[0.943s] reading manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[0.944s] writing manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[0.944s] running build
+[0.944s] running build_py
+[0.944s] copying experiment_python/communicateWiFiUDP_ESP32.py -> /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python
+[0.944s] copying experiment_python/webserver.py -> /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python
+[0.945s] running install
+[0.945s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.945s]   warnings.warn(
+[0.945s] running install_lib
+[0.946s] copying /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python/communicateWiFiUDP_ESP32.py -> /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python
+[0.946s] copying /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python/webserver.py -> /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python
+[0.947s] byte-compiling /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python/communicateWiFiUDP_ESP32.py to communicateWiFiUDP_ESP32.cpython-310.pyc
+[0.948s] byte-compiling /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python/Drive_Controller.py to Drive_Controller.cpython-310.pyc
+[0.948s] Sorry: IndentationError: expected an indented block after 'elif' statement on line 81 (Drive_Controller.py, line 89)
+[0.949s] byte-compiling /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python/webserver.py to webserver.cpython-310.pyc
+[0.949s] running install_data
+[0.950s] running install_egg_info
+[0.951s] removing '/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info' (and everything under it)
+[0.951s] Copying ../../build/experiment_python/experiment_python.egg-info to /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info
+[0.952s] running install_scripts
+[0.968s] Installing Collect_Controller script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.968s] Installing Drive_Controller script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.968s] Installing communicateWebSockets_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.968s] Installing communicateWiFiUDP_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.968s] Installing communicateWiFi_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.969s] Installing webserver script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.969s] writing list of installed files to '/home/kaibuchisoma/test_ws/build/experiment_python/install.log'
+[0.989s] Invoked command in '/home/kaibuchisoma/test_ws/src/experiment_python' returned '0': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed

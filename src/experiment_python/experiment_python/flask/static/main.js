@@ -25,9 +25,8 @@ socket.on('connect', function () {
     socket.emit('my event', { data: 'I\'m connected!' });
 });
 
-socket.on('my response', function (msg) {
-    console.log(36);
-    $('#log').append('<br>' + $('<div/>').text('Received #' + msg.count + ': ' + msg.data).html());
+socket.on('json', function () {
+    console.log(29);
 });
 
 window.setInterval(function () {
@@ -43,8 +42,6 @@ socket.on('my pong', function () {
     var sum = 0;
     for (var i = 0; i < ping_pong_times.length; i++)
         sum += ping_pong_times[i];
-    console.log(52)
-    console.log(Math.round(10 * sum / ping_pong_times.length) / 10);
     $('#ping').text(Math.round(10 * sum / ping_pong_times.length) / 10 + "ms");
 });
 

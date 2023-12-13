@@ -10,17 +10,6 @@ from launch.substitutions import LaunchConfiguration
 def generate_launch_description():
     return LaunchDescription(
         [
-            # Node(
-            #     package="joy",
-            #     namespace="robocon2023_b_dash",
-            #     executable="joy_node",
-            # ),
-            # Node(
-            #     package="experiment_python",
-            #     executable="communicateWiFi_ESP32",
-            #     output = "screen", # print wo hyouzi
-            #     # prefix= "xterm -e",
-            # ),
             Node(
                 package="experiment_python",
                 executable="communicateWiFiUDP_ESP32",
@@ -30,27 +19,21 @@ def generate_launch_description():
             Node(
                 package="joy",
                 executable="joy_node",
-                # output="screen",
                 parameters=[{"device_id": 0}],
+                remappings=[("/joy", "/joy2")],
             ),
-            # Node(
-            #     package="experiment_python",
-            #     executable="Drive_Controller",
-            # ),
-            # Node(
-            #     package="experiment_python",
-            #     executable="Collect_Controller",
-            # ),
+            Node(
+                package="joy",
+                executable="joy_node",
+                parameters=[{"device_id": 1}],
+                remappings=[("/joy", "/joy1")],
+            ),
+
             # Node(
             #     package="experiment_python",
             #     executable="webserver",
-            #     # output = "screen", # print wo hyouzi
+            #     output = "screen", # print wo hyouzi
             #     # prefix= "xterm -e",
-            # ),
-            # Node(
-            #     package="robocon2023_b_dash",
-            #     namespace="robocon2023_b_dash",
-            #     executable="SerialKIMD",
             # ),
             # Node(
             #     package="fruit_detection",

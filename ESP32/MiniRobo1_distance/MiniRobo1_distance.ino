@@ -5,6 +5,10 @@
 #include <Wire.h>
 #include <VL53L0X.h>
 #include "SSD1306.h"  //ディスプレイ用ライブラリを読み込み
+#include <MPU9250.h>
+#include "MPU9250.h"
+
+MPU9250 mpu;  // You can also use MPU9255 as is
 
 #define LED_BUILTIN 2
 
@@ -18,7 +22,7 @@ int serialLoopCount = 0;
 
 int temp = 0;
 
-int every50thExecution=0;
+int every50thExecution = 0;
 
 const char* ssid = "明志-2g";
 const char* password = "nitttttc";
@@ -40,23 +44,18 @@ typedef struct {
 const dataDictionary PIN_array[]{
   { 0, 25, 32, 33 },
   { 1, 26, 14, 27 },
-  { 2, 13, 16, 17 },
+  { 2, 13, 16, 17 },////////////////////////変える
 };
 
 float battery_voltage = 0;
 int battery_voltage_PIN = 35;
 bool low_battery_voltage = false;
-float ultrasonic_sensor_right_front = 0;
-const int ultrasonic_sensor_right_front_PIN = 18;
-float ultrasonic_sensor_right_back = 0;
-const int ultrasonic_sensor_right_back_PIN = 19;
-float ultrasonic_sensor_left_back = 0;
-const int ultrasonic_sensor_left_back_PIN = 23;
 int tof_sensor = 0;
+float angle_raw = 0;
 
 String jsonString = "{}";
 
-void setup(){
+void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(battery_voltage_PIN, INPUT);
 
@@ -65,7 +64,9 @@ void setup(){
   display.init();                     //ディスプレイを初期化
   display.setFont(ArialMT_Plain_16);  //フォントを設定
 
-  // Wire.begin();
+  Wire.begin();
+
+  mpu.setup(0x68);  // ジャイロセンサー
 
   // sensor.init();
   // sensor.setTimeout(100);
@@ -158,8 +159,8 @@ void loop() {
   }
 
   every50thExecution += 1;
-  if (every50thExecution > 47){
-      every50thExecution = 0;
+  if (every50thExecution > 47) {
+    every50thExecution = 0;
     // 電圧監視
     battery_voltage = analogRead(35) * 4.034 * 3.3 / 4096;
     if (battery_voltage < 9) {
@@ -194,46 +195,12 @@ void loop() {
     }
   }
 
-  float duration=0;
-  pinMode(ultrasonic_sensor_right_front_PIN, OUTPUT);
-  digitalWrite(ultrasonic_sensor_right_front_PIN, LOW);
-  delayMicroseconds(2);
-  digitalWrite(ultrasonic_sensor_right_front_PIN, HIGH);
-  delayMicroseconds(5);
-  digitalWrite(ultrasonic_sensor_right_front_PIN, LOW);
-  pinMode(ultrasonic_sensor_right_front_PIN, INPUT);
-  duration = pulseIn(ultrasonic_sensor_right_front_PIN, HIGH, 1000);
-  ultrasonic_sensor_right_front = duration / 58.2;
-  // Serial.println(ultrasonic_sensor_right_front);
-
-  delay(1);
-
-  pinMode(ultrasonic_sensor_right_back_PIN, OUTPUT);
-  digitalWrite(ultrasonic_sensor_right_back_PIN, LOW);
-  delayMicroseconds(2);
-  digitalWrite(ultrasonic_sensor_right_back_PIN, HIGH);
-  delayMicroseconds(5);
-  digitalWrite(ultrasonic_sensor_right_back_PIN, LOW);
-  pinMode(ultrasonic_sensor_right_back_PIN, INPUT);
-  duration = pulseIn(ultrasonic_sensor_right_back_PIN, HIGH, 1000);
-  ultrasonic_sensor_right_back = duration / 58.2;
-  // Serial.println(ultrasonic_sensor_right_back);
-
-  delay(1);
-
-  pinMode(ultrasonic_sensor_left_back_PIN, OUTPUT);
-  digitalWrite(ultrasonic_sensor_left_back_PIN, LOW);
-  delayMicroseconds(2);
-  digitalWrite(ultrasonic_sensor_left_back_PIN, HIGH);
-  delayMicroseconds(5);
-  digitalWrite(ultrasonic_sensor_left_back_PIN, LOW);
-  pinMode(ultrasonic_sensor_left_back_PIN, INPUT);
-  duration = pulseIn(ultrasonic_sensor_left_back_PIN, HIGH, 1000);
-  ultrasonic_sensor_left_back = duration / 58.2;
-  // Serial.println(ultrasonic_sensor_left_back);
+  if (mpu.update()) {
+    angle_raw = mpu.getYaw();
+  }
 
   udp.beginPacket(python_ip, python_port);
-  jsonString = "{\"ultrasonic_sensor_right_front\":" + String(ultrasonic_sensor_right_front, 2) + ",\"ultrasonic_sensor_right_back\":" + String(ultrasonic_sensor_right_back, 2) +",\"ultrasonic_sensor_left_back\":" + String(ultrasonic_sensor_left_back,2)+"}";
+  jsonString = "{\"angle\":" + String(angle_raw, 2) + "}";
   udp.print(jsonString);
   udp.endPacket();
 
@@ -258,7 +225,7 @@ void PWM(int motor_id, int duty) {
     }
     ledcWrite(PIN_array[motor_id - 1].PWM_channels, abs(duty));
   } else {
-    temp = temp +1;
+    temp = temp + 1;
     if (temp > 100) {
       for (int i = 0; i < 3; i++) {
         digitalWrite(PIN_array[i].INA, HIGH);

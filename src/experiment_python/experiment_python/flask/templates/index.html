@@ -8,57 +8,54 @@
     <script type=text/javascript src="{{ url_for('static', filename='main.js') }}"></script>
   </head>
   <body>
-    <div id="grid">
-      <div id="header">
-        <!-- バッテリー残量・ping -->
-        <div id="countdown_time"><span>3</span>分<span>58</span>秒</div>
-        <div id="wifi_ssid">名刺2g</div>
-        <div id="IPadoress_Ubuntu">192.168.1.1</div>
-        <div id="IPadoress_ESP32">192.168.1.1</div>
-        <div id="battery_voltage"><span>-</span>V</div>
-        <div id="ping"><span>-</span>ping</div>
-      </div>
-      <div id="communicate">
-      <h1>通信(Ubuntu ⇔ ESP32)</h1>
+    <div class="container">
+      <div class="robot">
+        <h1>ロボット</h1>
+        <div id="esp32_ip">192.168.-</div>
+        <!-- テーブルにする -->
         <div id="motor1" class="change_inputnumber_range_grid">
-          <p>左タイヤ</p>
-          <input type="checkbox" id="motor1_checkbox" name="checkbox1">
-          <input type="range" id="motor1_range" name="motor1" min="0" max="255" step="1" value="127">
-          <input type="number" id="motor1_inputnumber" />
+          <p>左車輪</p>
+          <input type="range" id="motor1_range" name="motor1" min="0" max="510" step="1" value="255">
+          <p id="motor1_inputnumber">0</p>
         </div>
         <div id="motor2" class="change_inputnumber_range_grid">
-          <p>右タイヤ</p>
-          <input type="checkbox" id="motor2_checkbox" name="checkbox2">
-          <input type="range" id="motor2_range" name="motor1" min="0" max="255" step="1" value="127">
-          <input type="number" id="motor2_inputnumber" />
+          <p>右車輪</p>
+          <input type="range" id="motor2_range" name="motor2" min="0" max="510" step="1" value="255">
+          <p id="motor2_inputnumber">0</p>
         </div>
         <div id="motor3" class="change_inputnumber_range_grid">
           <p>回収機構</p>
-          <input type="checkbox" id="motor3_checkbox" name="checkbox3">
-          <input type="range" id="motor3_range" name="motor3" min="0" max="255" step="1" value="127">
-          <input type="number" id="motor3_inputnumber" />
+          <input type="range" id="motor3_range" name="motor3" min="0" max="510" step="1" value="255">
+          <p id="motor3_inputnumber">0</p>
         </div>
-      </div>
+        <div>前</div>
+        <div>100 cm</div>
+        <div>右前</div>
+        <div>3 cn</div>
+        <div>右後</div>
+        <div>3 cm</div>
+        <div>左後ろ</div>
+        <div>3 cm</div>
+        <div id="battery_voltage"><span>-</span>V</div>
+        <div id="wifi_signal_strength"><span>-</span>dBm</div>
 
-            <div id="serial_monitor">
-      <h1>シリアルモニタ</h1>
+      </div>
+      <div class="controller">
+        <h1>コントローラー</h1>
+        <div id="ubuntu_ip">192.168.-</div>
+
+      </div>
+      <div class="UDP_reception">
+        <h1>ESP32のログ</h1>
         <div id="result"></div>
       </div>
-
-      <div id="joy">
-        <div id="joy" class="change_inputnumber_range_grid">
-          <p>コントローラー</p>
-          <table>
-            <p>1〜16+axes</p>
-          </table>
-        </div>
-        <p id="result2"></p>
-        <p id="fps"></p>
+      <div class="Timer">
+        <div id="countdown_time">3:58</div>
+        <div id="wifi_ssid">名刺2g</div>
+        <div id="ping"><span>-</span>ping</div>
+        <div id="fps"><span>-</span>fps</div>
         <p>接続者数<span id="user_count"></span>人</p>
-
-        <p>{{ gafa.age }}</p>
       </div>
-
     </div>
   </body>
 </html>
