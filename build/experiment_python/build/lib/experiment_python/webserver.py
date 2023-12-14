@@ -25,11 +25,10 @@ url = f"http://{ip}:5000/"
 # ユーザー数
 user_count = 0
 # 現在のテキスト
-text = ""
-serial_reception_text = [""]
-img_str = "data:image/jpeg;base64だよ"
 
-reception_json = {}
+reception_json = {
+    "state":0
+}
 
 # webbrowser.open(url, 0)# デフォルトブラウザでWebサイトを新しいタブで開く
 
@@ -93,36 +92,11 @@ class MinimalSubscriber(Node):
 
 #############################################################
 
-def emit_data_periodically():
-    global reception_json
-    while True:
-        print("99", flush=True)
-        socketio.sleep(0.016)  # 0.016秒ごとに実行
-        # time.sleep(0.016) # 無駄にCPUを使わないようにする
-        # データをブロードキャスト
-        with thread_lock:
-            if user_count > 0:
-                if hasattr(flask.request, 'namespace'):
-                        namespace = Flask.request.namespace
-                        print("106", flush=True)
-                        emit('json', reception_json, namespace=namespace)
-                        print("107", flush=True)
-                # try:
-                #     print("106", flush=True)
-                #     emit('json', reception_json)
-                #     print("107", flush=True)
-                # except RuntimeError:
-                #     # リクエストコンテキストが存在しない場合は無視
-                #     pass
-
-
-
 def flask_socketio_run():
     print("flask_socketio_run起動", flush=True)
     # socketio.run(app, debug=True, host="0.0.0.0", port=5000use_reloader=False,  allow_unsafe_werkzeug=True)
     # 非同期処理に使用するライブラリの指定
     # `threading`, `eventlet`, `gevent`から選択可能
-    socketio.start_background_task(target=emit_data_periodically)
     socketio.run(app, host="0.0.0.0", port=5000,) # , threaded=Trueやると起動しない  async_mode="threading"
 
 @app.route("/")
@@ -134,12 +108,10 @@ def index():
 @socketio.on('connect')
 def connect(auth):
     print("connctされた")
-    global user_count, text, img_str
+    global user_count
     user_count += 1
     # 接続者数の更新（全員向け）
     emit('count_update', {'user_count': user_count}, broadcast=True)
-    # テキストエリアの更新
-    # emit('text_update', {'text': text})/
 
 
 # ユーザーの接続が切断すると実行
@@ -149,6 +121,11 @@ def disconnect():
     user_count -= 1
     # 接続者数の更新（全員向け）
     emit('count_update', {'user_count': user_count}, broadcast=True)
+
+
+@socketio.on('json_request')
+def json():
+    emit('json_receive', reception_json)
 
 
 @socketio.on("my ping")

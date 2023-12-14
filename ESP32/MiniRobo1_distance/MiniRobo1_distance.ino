@@ -10,6 +10,8 @@
 
 MPU9250 mpu;  // You can also use MPU9255 as is
 
+unsigned long last_receive_time;
+
 #define LED_BUILTIN 2
 
 VL53L0X sensor;
@@ -137,7 +139,9 @@ void loop() {
       Serial.println(error.f_str());
       return;
     }
-    if (doc.containsKey("motor1")) {
+    last_receive_time = millis();
+    if (doc.containsKey("motor1"))
+    {
       // Serial.println(String(doc["motor1"]["speed"].as<float>()));
       PWM(1, doc["motor1"]["speed"]);
       analogWrite(LED_BUILTIN, abs(int(doc["motor1"]["speed"])));
@@ -186,6 +190,14 @@ void loop() {
     }
   }
 
+  // if (millis() - last_receive_time > 500){
+  //   // 最後の受信から500msたったら 強制停止
+  //   for (int i = 0; i < 3; i++) {
+  //     digitalWrite(PIN_array[i].INA, HIGH);
+  //     digitalWrite(PIN_array[i].INB, HIGH);
+  //   }
+  // }
+
   if (low_battery_voltage == true) {
     if (temp > 100) {
       for (int i = 0; i < 3; i++) {
@@ -195,12 +207,18 @@ void loop() {
     }
   }
 
+  // Serial.println("210");
+
   if (mpu.update()) {
     angle_raw = mpu.getYaw();
   }
 
+  Serial.println(angle_raw);
+
+  // Serial.println("216");
+
   udp.beginPacket(python_ip, python_port);
-  jsonString = "{\"angle\":" + String(angle_raw, 2) + "}";
+  jsonString = "{\"raw_angle\":" + String(angle_raw, 2) + "}";
   udp.print(jsonString);
   udp.endPacket();
 

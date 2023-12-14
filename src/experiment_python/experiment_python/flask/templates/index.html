@@ -11,38 +11,47 @@
     <div class="container">
       <div class="robot">
         <h1>ロボット</h1>
-        <div id="esp32_ip">192.168.-</div>
-        <!-- テーブルにする -->
+        <div id="esp32_ip_value">192.168.-</div>
+
         <div id="motor1" class="change_inputnumber_range_grid">
           <p>左車輪</p>
           <input type="range" id="motor1_range" name="motor1" min="0" max="510" step="1" value="255">
-          <p id="motor1_inputnumber">0</p>
+          <p id="motor1_value">0</p>
         </div>
         <div id="motor2" class="change_inputnumber_range_grid">
           <p>右車輪</p>
           <input type="range" id="motor2_range" name="motor2" min="0" max="510" step="1" value="255">
-          <p id="motor2_inputnumber">0</p>
+          <p id="motor2_value">0</p>
         </div>
         <div id="motor3" class="change_inputnumber_range_grid">
           <p>回収機構</p>
           <input type="range" id="motor3_range" name="motor3" min="0" max="510" step="1" value="255">
-          <p id="motor3_inputnumber">0</p>
+          <p id="motor3_value">0</p>
         </div>
-        <div>前</div>
-        <div>100 cm</div>
-        <div>右前</div>
-        <div>3 cn</div>
-        <div>右後</div>
-        <div>3 cm</div>
-        <div>左後ろ</div>
-        <div>3 cm</div>
-        <div id="battery_voltage"><span>-</span>V</div>
-        <div id="wifi_signal_strength"><span>-</span>dBm</div>
+
+        <div id="distance">
+          <p>距離</p>
+          <p id="distance_value">0</p>
+        </div>
+        <div id="angle">
+          <p>角度</p>
+          <p id="angle_vallue">0</p>
+        </div>
+
+        <div id="battery_voltage">
+          <p>バッテリー電圧</p>
+          <p id="battery_voltage_value"><span>-</span>V</p>
+        </div>
+
+        <div id="wifi_signal_strength">
+          <p>WiFi電波強度</p>
+          <p id="wifi_signal_strength_value"><span>-</span>dBm</p>
+        </div>
 
       </div>
       <div class="controller">
         <h1>コントローラー</h1>
-        <div id="ubuntu_ip">192.168.-</div>
+        <div id="ubuntu_ip_value">192.168.-</div>
 
       </div>
       <div class="UDP_reception">
@@ -51,7 +60,7 @@
       </div>
       <div class="Timer">
         <div id="countdown_time">3:58</div>
-        <div id="wifi_ssid">名刺2g</div>
+        <div id="wifi_ssid_value">名刺2g</div>
         <div id="ping"><span>-</span>ping</div>
         <div id="fps"><span>-</span>fps</div>
         <p>接続者数<span id="user_count"></span>人</p>

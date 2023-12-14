@@ -28,19 +28,11 @@ def generate_launch_description():
                 parameters=[{"device_id": 1}],
                 remappings=[("/joy", "/joy1")],
             ),
-
             # Node(
             #     package="experiment_python",
             #     executable="webserver",
             #     output = "screen", # print wo hyouzi
             #     # prefix= "xterm -e",
-            # ),
-            # Node(
-            #     package="fruit_detection",
-            #     namespace="robocon2023_b_dash",
-            #     executable="pubdetect",
-            #     output = "screen", # print wo hyouzi
-            #     prefix= "xterm -e",
             # ),
         ]
     )
