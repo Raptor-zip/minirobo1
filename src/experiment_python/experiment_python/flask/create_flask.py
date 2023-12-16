@@ -32,7 +32,9 @@ def main():
     # socketio.run(app, debug=True, host="0.0.0.0", port=5000use_reloader=False,  allow_unsafe_werkzeug=True)
     # 非同期処理に使用するライブラリの指定
     # `threading`, `eventlet`, `gevent`から選択可能
-    socketio.run(app, host="0.0.0.0", port=5000,) # , threaded=Trueやると起動しない  async_mode="threading"
+    # socketio.run(app, host="0.0.0.0", port=5000,) # , threaded=Trueやると起動しない  async_mode="threading"
+    socketio.run(app, host='192.168.10.68', port=5000, ssl_context=('/cert.pem', '/key.pem'), ) # , threaded=Trueやると起動しない  async_mode="threading"
+
 
     # スレッドを格納するためのグローバル変数
 

@@ -102,7 +102,8 @@ def flask_socketio_run():
 @app.route("/")
 def index():
     # data = Data(motor_1='190', motor_2=180, motor_3=100) # インスタンスの作成
-    return render_template('index.html') # インスタンスをテンプレートに渡す , gafa=data
+    # return render_template('index.html') # インスタンスをテンプレートに渡す , gafa=data
+    return render_template('index2.html') # インスタンスをテンプレートに渡す , gafa=data
 
 # ユーザーが新しく接続すると実行
 @socketio.on('connect')
