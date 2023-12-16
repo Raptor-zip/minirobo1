@@ -15,7 +15,6 @@ experiment_python/communicateWiFiUDP_ESP32 copy.py
 experiment_python/communicateWiFiUDP_ESP32.py
 experiment_python/communicate_ESP32.py
 experiment_python/serial_flask copy.py
-experiment_python/timeraa.py
 experiment_python/webserver.py
 resource/experiment_python
 test/test_copyright.py

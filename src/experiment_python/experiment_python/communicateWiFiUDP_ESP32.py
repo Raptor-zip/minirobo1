@@ -24,17 +24,13 @@ esp32_port = 12345
 # UDPソケットの作成
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-# ローカルポート番号
-local_port = 12346
+sp_udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sp_udp_socket.bind(('127.0.0.1', 5002))
+sp_udp_socket.settimeout(1.0)  # タイムアウトを1秒に設定
 
-# ローカルUDPソケットの作成
 local_udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-local_udp_socket.bind(('0.0.0.0', local_port))
-
+local_udp_socket.bind(('0.0.0.0', 12346))
 local_udp_socket.settimeout(1.0)  # タイムアウトを1秒に設定
-
-# try:
-print(f"Listening for UDP packets on 0.0.0.0:{local_port}", flush=True)
 
 try:
     result = subprocess.check_output(['iwgetid', '-r'], universal_newlines=True)
@@ -45,10 +41,23 @@ except subprocess.CalledProcessError:
 
 def main():
     with ThreadPoolExecutor(max_workers=3) as executor:
-        executor.submit(udp_reception)
+        executor.submit(sp_udp_reception)
+        # executor.submit(udp_reception)
         executor.submit(battery_alert)
         future = executor.submit(ros)
         future.result()         # 全てのタスクが終了するまで待つ
+
+def sp_udp_reception():
+    global sp_udp_socket
+    global reception_json
+    while True:
+        try :
+            message, cli_addr = sp_udp_socket.recvfrom(1024)
+            # print(f"Received message : {message.decode('utf-8')}",flush=True)
+            reception_json_temp = json.loads(message.decode('utf-8'))
+            reception_json.update(reception_json_temp)
+        except Exception as e:
+            print(f"スマホから受信に失敗: {e}", flush=True)
 
 def udp_reception():
     global local_udp_socket
@@ -57,12 +66,9 @@ def udp_reception():
         try:
             # データを受信
             data, addr = local_udp_socket.recvfrom(1024)
-            print(f"Received {addr}: {data.decode('utf-8')}",flush=True)
+            # print(f"Received {addr}: {data.decode('utf-8')}",flush=True)
             reception_json_temp = json.loads(data.decode('utf-8'))
             reception_json.update(reception_json_temp)
-
-            # 角度を取得する
-            # 距離を取得する
         except Exception as e:
             print(f"ESP32から受信に失敗: {e}", flush=True)
             reception_json["battery_voltage"] = 0
@@ -95,7 +101,7 @@ class MinimalSubscriber(Node):
     motor1_speed = 0
     motor2_speed = 0
     motor3_speed = 0
-    normal_max_motor_speed = 220 # 自動運転時の最高速度
+    normal_max_motor_speed = 230 # 自動運転時の最高速度
 
     distance_adjust = -8 # パラメーター調整必要
     current_distance =0
@@ -169,7 +175,7 @@ class MinimalSubscriber(Node):
         # 0°に旋回
         # print("現在角度",self.current_angle,flush=True)
         # print(target_angle - self.current_angle,flush=True)
-        if self.current_angle == target_angle: # この判定ゆるくする！！！！！！！！！！！！！！！！
+        if abs(self.current_angle - target_angle) < 2: # この判定ゆるくする！！！！！！！！！！！！！！！！
             # 止まる
             self.motor1_speed = 0
             self.motor2_speed = 0
@@ -236,34 +242,34 @@ class MinimalSubscriber(Node):
                 distance_2 = 255
             self.motor2_speed = distance_2
 
-            if abs(target_angle - self.current_angle) > 3: # 単位:° パラメーター調整必要
+            target_plus_180 = target_angle + 180
+            if target_plus_180 > 360:
+                target_plus_180 = 360 - target_angle
+
+            angle_difference =  abs(self.current_angle - target_angle)
+            if angle_difference > 180:
+                angle_difference = 360 - abs(self.current_angle-target_angle)
+
+            if target_angle > 180:
+                if target_plus_180 <= self.current_angle <= target_angle:
+                    angle_difference =  angle_difference*-1
+            else:
+                if target_angle <= self.current_angle <= target_plus_180:
+                    pass
+                else:
+                    angle_difference =  angle_difference*-1
+
+            # print(angle_difference,flush=True)
+
+            if abs(angle_difference) > 2: # 単位:° パラメーター調整必要
                 # 壁と平行じゃないなら
-                if target_angle == 0:
-                    if 180 > target_angle - self.current_angle:
-                        self.motor1_speed = self.motor1_speed - target_angle - self.current_angle * 2 # パラメーター調整必要
-                    else:
-                        self.motor2_speed = self.motor2_speed - target_angle - self.current_angle * 2 # パラメーター調整必要
-                if target_angle == 90:
-                    if target_angle - self.current_angle < 0:
-                        self.motor2_speed = self.motor2_speed - target_angle - self.current_angle * 2 # パラメーター調整必要
-                    else:
-                        if 270 > self.current_angle:
-                            self.motor1_speed = self.motor1_speed - target_angle - self.current_angle * 2 # パラメーター調整必要
-                        else:
-                            self.motor2_speed = self.motor2_speed - target_angle - self.current_angle * 2 # パラメーター調整必要
-                if target_angle == 180:
-                    if target_angle - self.current_angle < 0:
-                        self.motor1_speed = self.motor1_speed - target_angle - self.current_angle * 2 # パラメーター調整必要
-                    else:
-                        self.motor2_speed = self.motor2_speed - target_angle - self.current_angle * 2 # パラメーター調整必要
-                if target_angle == 270:
-                    if target_angle - self.current_angle < 0:
-                        self.motor1_speed = self.motor1_speed - target_angle - self.current_angle * 2 # パラメーター調整必要
-                    else:
-                        if 90 > self.current_angle:
-                            self.motor1_speed = self.motor1_speed - target_angle - self.current_angle * 2 # パラメーター調整必要
-                        else:
-                            self.motor2_speed = self.motor2_speed - target_angle - self.current_angle * 2 # パラメーター調整必要
+                if angle_difference > 0:
+                    # 右に傾いているなら
+                    self.motor1_speed = self.motor1_speed - angle_difference * 2 # パラメーター調整必要
+                else:
+                    # 左に傾いているなら
+                    self.motor2_speed = self.motor2_speed - abs(angle_difference * 2) # パラメーター調整必要
+
                 if self.motor1_speed > 255:
                     self.motor1_speed = 255
                 elif self.motor1_speed < -1 * 255:
@@ -282,15 +288,18 @@ class MinimalSubscriber(Node):
     def timer_callback_0001(self):
         global motor_speed
         global reception_json
+        # print(reception_json["raw_angle"],flush=True)
+        self.current_angle = reception_json["raw_angle"] + self.angle_adjust
+        if self.current_angle < 0:
+            self.current_angle = 360 + self.current_angle
 
-        if reception_json["raw_angle"] < 0:
-            # マイナスのとき
-            self.current_angle = 180 - reception_json["raw_angle"] + self.angle_adjust
-        else:
-            self.current_angle = reception_json["raw_angle"] + self.angle_adjust
+        # print(reception_json["raw_angle"],self.angle_adjust,self.current_angle,flush=True)
 
+###################################################################################################
         # self.current_distance = reception_json["raw_distance"] - self.distance_adjust
         self.current_distance = 50
+###################################################################################################
+
 
         if self.state == 1:
             self.turn(0)
@@ -309,9 +318,10 @@ class MinimalSubscriber(Node):
         if self.state == 8:
             self.straight(270)
 
-        print("state  ",self.state,flush=True)
-        print("motor1 ",self.motor1_speed,flush=True)
-        print("motor2 ",self.motor2_speed,flush=True)
+        print(self.state , self.motor1_speed, self.motor2_speed, self.motor3_speed,flush=True)
+        # print("state  ",self.state,flush=True)
+        # print("motor1 ",self.motor1_speed,flush=True)
+        # print("motor2 ",self.motor2_speed,flush=True)
         # print("motor3 ",self.motor3_speed,flush=True)
 
         serialCommand = f"{{'motor1':{{'speed':{int(self.motor1_speed)}}},'motor2':{{'speed':{int(self.motor2_speed)}}},'motor3':{{'speed':{int(self.motor3_speed)}}}}}\n"
@@ -333,14 +343,14 @@ class MinimalSubscriber(Node):
             self.motor1_speed = int(joy.axes[1]*256)
             self.motor2_speed=int(joy.axes[3]*256)
 
-        if self.buttons_ZL == 0 and joy.buttons[6] == 1:
+        if joy.buttons[6] == 1:
             # 走行補助強制停止
             self.state = 0
             self.motor1_speed = 0
             self.motor2_speed =0
             self.motor3_speed=0
 
-        if self.buttons_ZR == 0 and joy.buttons[7] == 1:
+        if joy.buttons[7] == 1:
             # 走行補助強制停止
             self.state = 0
             self.motor1_speed = 0
@@ -374,7 +384,6 @@ class MinimalSubscriber(Node):
 
         if self.buttons_L == 1 and self.buttons_R == 1:
             # 角度リセット
-            print("377",flush=True)
             if reception_json["raw_angle"] < 0:
                 # マイナスのとき
                 self.angle_adjust = - 180 - reception_json["raw_angle"]
@@ -402,6 +411,20 @@ class MinimalSubscriber(Node):
     def joy2_listener_callback(self, joy):
         # 回収機構のモーター
         self.motor3_speed=int(joy.axes[1]*256)
+
+        if joy.buttons[6] == 1:
+            # 走行補助強制停止
+            self.state = 0
+            self.motor1_speed = 0
+            self.motor2_speed =0
+            self.motor3_speed=0
+
+        if joy.buttons[7] == 1:
+            # 走行補助強制停止
+            self.state = 0
+            self.motor1_speed = 0
+            self.motor2_speed =0
+            self.motor3_speed=0
 
 
 if __name__ == '__main__':

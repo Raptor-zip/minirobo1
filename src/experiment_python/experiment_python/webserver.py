@@ -5,22 +5,16 @@ from sensor_msgs.msg import Joy
 from concurrent.futures import ThreadPoolExecutor # threadPoolExecutor
 
 from flask import Flask, render_template, request # Flaskを使うため
-import webbrowser # webbrowserを開くため
 import ipget # ipアドレスを取得するため
 import logging # Flaskのログを削除する
 import json
 
-from threading import Lock
-import time
-thread_lock = Lock()
+from threading import Lock # これ消していいよね？
+thread_lock = Lock() # これ消していいよね？
 
 from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, rooms, disconnect
 
 ip = ipget.ipget()
-# print(ip, flush=True)
-# print(ip.ipaddr('eth0'))    # 有線IP
-# print(ip.ipaddr('wlan0'))    # 無線IP
-url = f"http://{ip}:5000/"
 
 # ユーザー数
 user_count = 0
@@ -44,7 +38,7 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, cors_allowed_origins='*') # , async_mode='eventlet'
 
 
-@socketio.event
+@socketio.event # これ消していいよね?
 def main():
     with ThreadPoolExecutor(max_workers=2) as executor:
         # executor.submit(publish)

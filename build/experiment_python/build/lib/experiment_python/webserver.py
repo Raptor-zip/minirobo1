@@ -5,22 +5,16 @@ from sensor_msgs.msg import Joy
 from concurrent.futures import ThreadPoolExecutor # threadPoolExecutor
 
 from flask import Flask, render_template, request # Flaskを使うため
-import webbrowser # webbrowserを開くため
 import ipget # ipアドレスを取得するため
 import logging # Flaskのログを削除する
 import json
 
-from threading import Lock
-import time
-thread_lock = Lock()
+from threading import Lock # これ消していいよね？
+thread_lock = Lock() # これ消していいよね？
 
 from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, rooms, disconnect
 
 ip = ipget.ipget()
-# print(ip, flush=True)
-# print(ip.ipaddr('eth0'))    # 有線IP
-# print(ip.ipaddr('wlan0'))    # 無線IP
-url = f"http://{ip}:5000/"
 
 # ユーザー数
 user_count = 0
@@ -44,7 +38,7 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, cors_allowed_origins='*') # , async_mode='eventlet'
 
 
-@socketio.event
+@socketio.event # これ消していいよね?
 def main():
     with ThreadPoolExecutor(max_workers=2) as executor:
         # executor.submit(publish)
@@ -97,13 +91,13 @@ def flask_socketio_run():
     # socketio.run(app, debug=True, host="0.0.0.0", port=5000use_reloader=False,  allow_unsafe_werkzeug=True)
     # 非同期処理に使用するライブラリの指定
     # `threading`, `eventlet`, `gevent`から選択可能
-    socketio.run(app, host="0.0.0.0", port=5000,) # , threaded=Trueやると起動しない  async_mode="threading"
+    socketio.run(app, host="0.0.0.0", port=5000 ) # , threaded=Trueやると起動しない  async_mode="threading"
 
 @app.route("/")
 def index():
     # data = Data(motor_1='190', motor_2=180, motor_3=100) # インスタンスの作成
     # return render_template('index.html') # インスタンスをテンプレートに渡す , gafa=data
-    return render_template('index2.html') # インスタンスをテンプレートに渡す , gafa=data
+    return render_template('index3.html') # インスタンスをテンプレートに渡す , gafa=data
 
 # ユーザーが新しく接続すると実行
 @socketio.on('connect')
