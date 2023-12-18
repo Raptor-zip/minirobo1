@@ -3,18 +3,14 @@
 #include <WiFiUdp.h>
 #include <ArduinoJson.h>
 #include <Wire.h>
-#include <VL53L0X.h>
 #include "SSD1306.h"  //ディスプレイ用ライブラリを読み込み
-#include <MPU9250.h>
-#include "MPU9250.h"
+#include "Adafruit_VL53L0X.h"
 
-MPU9250 mpu;  // You can also use MPU9255 as is
+Adafruit_VL53L0X lox = Adafruit_VL53L0X();
 
 unsigned long last_receive_time;
 
 #define LED_BUILTIN 2
-
-VL53L0X sensor;
 
 String incomingStrings;  // for incoming serial data
 
@@ -28,7 +24,7 @@ int every50thExecution = 0;
 
 const char* ssid = "明志-2g";
 const char* password = "nitttttc";
-const char* python_ip = "192.168.20.68";
+const char* python_ip = "192.168.211.68";
 const int python_port = 12346;
 
 //本体裏側　0x78に接続→0x3C 0x7A→0x3A
@@ -46,14 +42,14 @@ typedef struct {
 const dataDictionary PIN_array[]{
   { 0, 25, 32, 33 },
   { 1, 26, 14, 27 },
-  { 2, 13, 16, 17 },////////////////////////変える
+  { 2, 13, 16, 17 },  ////////////////////////変える
 };
 
 float battery_voltage = 0;
 int battery_voltage_PIN = 35;
 bool low_battery_voltage = false;
 int tof_sensor = 0;
-float angle_raw = 0;
+float distance_raw = 0;
 
 String jsonString = "{}";
 
@@ -66,13 +62,13 @@ void setup() {
   display.init();                     //ディスプレイを初期化
   display.setFont(ArialMT_Plain_16);  //フォントを設定
 
-  Wire.begin();
+  if (!lox.begin()) {
+    Serial.println(F("Failed to boot VL53L0X"));
+    while (1)
+      ;
+  }
 
-  mpu.setup(0x68);  // ジャイロセンサー
-
-  // sensor.init();
-  // sensor.setTimeout(100);
-  // sensor.startContinuous(10);
+  lox.startRangeContinuous();
 
   delay(1000);
 
@@ -126,7 +122,7 @@ void loop() {
 
     startTime = micros();
 
-    // json = "{'motor1':{'speed':-128},'motor2':{'speed':-128},'motor3':{'speed':-128},'motor4':{'speed':-128}}";
+    // json = "{'motor1':{'speed':-128},'motor2':{'speed':-128},'motor3':{'speed':-128}";
 
     // JSON用の固定バッファを確保。
     StaticJsonDocument<300> doc;  // deserializeJson() failed: NoMemory とSerialで流れたらここの値を大きくする
@@ -140,8 +136,7 @@ void loop() {
       return;
     }
     last_receive_time = millis();
-    if (doc.containsKey("motor1"))
-    {
+    if (doc.containsKey("motor1")) {
       // Serial.println(String(doc["motor1"]["speed"].as<float>()));
       PWM(1, doc["motor1"]["speed"]);
       analogWrite(LED_BUILTIN, abs(int(doc["motor1"]["speed"])));
@@ -190,13 +185,13 @@ void loop() {
     }
   }
 
-  // if (millis() - last_receive_time > 500){
-  //   // 最後の受信から500msたったら 強制停止
-  //   for (int i = 0; i < 3; i++) {
-  //     digitalWrite(PIN_array[i].INA, HIGH);
-  //     digitalWrite(PIN_array[i].INB, HIGH);
-  //   }
-  // }
+  if (millis() - last_receive_time > 500) {
+    // 最後の受信から500msたったら 強制停止
+    for (int i = 0; i < 3; i++) {
+      digitalWrite(PIN_array[i].INA, HIGH);
+      digitalWrite(PIN_array[i].INB, HIGH);
+    }
+  }
 
   if (low_battery_voltage == true) {
     if (temp > 100) {
@@ -207,20 +202,16 @@ void loop() {
     }
   }
 
-  // Serial.println("210");
-
-  if (mpu.update()) {
-    angle_raw = mpu.getYaw();
+  if (lox.isRangeComplete()) {
+    Serial.print("Distance in mm: ");
+    Serial.println(lox.readRange());
+    distance_raw = lox.readRange();
+    Serial.println(distance_raw);
+    udp.beginPacket(python_ip, python_port);
+    jsonString = "{\"distance_distance\":" + String(distance_raw, 2) + "}";
+    udp.print(jsonString);
+    udp.endPacket();
   }
-
-  Serial.println(angle_raw);
-
-  // Serial.println("216");
-
-  udp.beginPacket(python_ip, python_port);
-  jsonString = "{\"raw_angle\":" + String(angle_raw, 2) + "}";
-  udp.print(jsonString);
-  udp.endPacket();
 
   delay(1);
 }

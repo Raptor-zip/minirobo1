@@ -16,12 +16,14 @@
         background-color: #000;
         color: #fff;
         font-weight: 900;
+        text-align: center;
       }
     </style>
   </head>
   <body>
     <p id="orientationOutput">Orientation:</p>
     <p id="batteryOutput">Battery Level:</p>
+    <p id="last">time</p>
     <p id="user_count">0人接続</p>
 
     <script
@@ -43,8 +45,7 @@
       }
 
       function handleBattery(battery) {
-        // let batteryLevel = battery.level * 100;
-        state.sp_battery_level = Number(battery.level * 100);
+        state.sp_battery_level = Number(Math.floor(battery.level * 100));
         document.getElementById(
           "batteryOutput"
         ).innerText = `バッテリー: ${state.sp_battery_level.toFixed()}%`;
@@ -65,15 +66,17 @@
       socket.on("count_update", function (msg) {
         document.getElementById("user_count").innerText = msg.user_count;
       });
-
-      window.setInterval(send_state, 1);
+      temp = 0;
+      window.setInterval(send_state, 20);
       function send_state() {
-        if (state.sp_battery_level != 0) {
-          socket.emit("state", state);
-        }
+        // state.raw_angle = temp;
+        socket.emit("state", state);
+        // temp++;
+
+        document.getElementById("last").innerHTML = temp;
       }
 
-      const fullscreenElement = document.getElementsByTagName("html");
+      const fullscreenElement = document.documentElement;
 
       console.log(fullscreenElement);
 
@@ -81,11 +84,24 @@
 
       function toggleFullScreen() {
         if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch((err) => {
-            console.error("Error attempting to enable full-screen mode:", err);
-          });
-        } else {
-          document.exitFullscreen();
+          fullscreenElement
+            .requestFullscreen()
+            .then(() => {
+              if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock("landscape").catch((err) => {
+                  console.error(
+                    "Error attempting to lock screen orientation:",
+                    err
+                  );
+                });
+              }
+            })
+            .catch((err) => {
+              console.error(
+                "Error attempting to enable full-screen mode:",
+                err
+              );
+            });
         }
       }
     </script>

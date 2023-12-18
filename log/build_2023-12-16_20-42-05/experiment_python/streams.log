@@ -1,0 +1,33 @@
+[0.683s] Invoking command in '/home/kaibuchisoma/test_ws/src/experiment_python': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed
+[0.900s] running egg_info
+[0.900s] writing ../../build/experiment_python/experiment_python.egg-info/PKG-INFO
+[0.900s] writing dependency_links to ../../build/experiment_python/experiment_python.egg-info/dependency_links.txt
+[0.901s] writing entry points to ../../build/experiment_python/experiment_python.egg-info/entry_points.txt
+[0.901s] writing requirements to ../../build/experiment_python/experiment_python.egg-info/requires.txt
+[0.901s] writing top-level names to ../../build/experiment_python/experiment_python.egg-info/top_level.txt
+[0.902s] reading manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[0.903s] writing manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'
+[0.903s] running build
+[0.903s] running build_py
+[0.903s] copying experiment_python/communicateWiFiUDP_ESP32.py -> /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python
+[0.904s] running install
+[0.907s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.907s]   warnings.warn(
+[0.907s] running install_lib
+[0.908s] copying /home/kaibuchisoma/test_ws/build/experiment_python/build/lib/experiment_python/communicateWiFiUDP_ESP32.py -> /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python
+[0.908s] byte-compiling /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python/communicateWiFiUDP_ESP32.py to communicateWiFiUDP_ESP32.cpython-310.pyc
+[0.910s] byte-compiling /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python/Drive_Controller.py to Drive_Controller.cpython-310.pyc
+[0.911s] Sorry: IndentationError: expected an indented block after 'elif' statement on line 81 (Drive_Controller.py, line 89)
+[0.911s] running install_data
+[0.911s] running install_egg_info
+[0.912s] removing '/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info' (and everything under it)
+[0.913s] Copying ../../build/experiment_python/experiment_python.egg-info to /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info
+[0.913s] running install_scripts
+[0.928s] Installing Collect_Controller script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.928s] Installing Drive_Controller script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.928s] Installing communicateWebSockets_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.929s] Installing communicateWiFiUDP_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.929s] Installing communicateWiFi_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.929s] Installing webserver script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python
+[0.929s] writing list of installed files to '/home/kaibuchisoma/test_ws/build/experiment_python/install.log'
+[0.949s] Invoked command in '/home/kaibuchisoma/test_ws/src/experiment_python' returned '0': PYTHONPATH=/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/experiment_python build --build-base /home/kaibuchisoma/test_ws/build/experiment_python/build install --record /home/kaibuchisoma/test_ws/build/experiment_python/install.log --single-version-externally-managed

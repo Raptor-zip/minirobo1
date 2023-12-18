@@ -40,6 +40,7 @@ def disconnect():
 def connect(json):
     global reception_json
     reception_json = json
+    print(json)
     # print(json["raw_angle"])
     # print(json["sp_battery_level"])
 
@@ -55,8 +56,9 @@ def publish():
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             sock.sendto(json.dumps(reception_json).encode('utf-8'), ('127.0.0.1', 5002))
-            print(json.dumps(reception_json))
-            time.sleep(0.001)
+            # print(reception_json)
+            # print(json.dumps(reception_json))
+            time.sleep(0.002)
 
         except KeyboardInterrupt:
             print('closing socket')

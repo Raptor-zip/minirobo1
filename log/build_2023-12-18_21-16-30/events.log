@@ -1,0 +1,46 @@
+[0.000000] (-) TimerEvent: {}
+[0.000427] (experiment_python) JobQueued: {'identifier': 'experiment_python', 'dependencies': OrderedDict()}
+[0.000563] (experiment_python) JobStarted: {'identifier': 'experiment_python'}
+[0.099638] (-) TimerEvent: {}
+[0.199949] (-) TimerEvent: {}
+[0.300278] (-) TimerEvent: {}
+[0.400586] (-) TimerEvent: {}
+[0.500946] (-) TimerEvent: {}
+[0.601312] (-) TimerEvent: {}
+[0.701764] (-) TimerEvent: {}
+[0.780135] (experiment_python) Command: {'cmd': ['/usr/bin/python3', 'setup.py', 'egg_info', '--egg-base', '../../build/experiment_python', 'build', '--build-base', '/home/kaibuchisoma/test_ws/build/experiment_python/build', 'install', '--record', '/home/kaibuchisoma/test_ws/build/experiment_python/install.log', '--single-version-externally-managed'], 'cwd': '/home/kaibuchisoma/test_ws/src/experiment_python', 'env': {'GJS_DEBUG_TOPICS': 'JS ERROR;JS LOG', 'LANGUAGE': 'ja:en', 'USER': 'kaibuchisoma', 'LC_TIME': 'en_US.UTF-8', 'XDG_SESSION_TYPE': 'x11', 'SHLVL': '1', 'HOME': '/home/kaibuchisoma', 'DESKTOP_SESSION': 'ubuntu', 'GIO_LAUNCHED_DESKTOP_FILE': '/usr/share/applications/terminator.desktop', 'GNOME_SHELL_SESSION_MODE': 'ubuntu', 'GTK_MODULES': 'gail:atk-bridge', 'LC_MONETARY': 'en_US.UTF-8', 'MANAGERPID': '1895', 'SYSTEMD_EXEC_PID': '2392', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLORTERM': 'truecolor', 'GIO_LAUNCHED_DESKTOP_FILE_PID': '7076', 'GTK_IM_MODULE': 'ibus', 'LOGNAME': 'kaibuchisoma', 'JOURNAL_STREAM': '8:24408', '_': '/usr/bin/colcon', 'XDG_SESSION_CLASS': 'user', 'USERNAME': 'kaibuchisoma', 'TERM': 'xterm-256color', 'GNOME_DESKTOP_SESSION_ID': 'this-is-deprecated', 'WINDOWPATH': '2', 'PATH': '/home/kaibuchisoma/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin', 'SESSION_MANAGER': 'local/kaibuchisoma-Ubuntu:@/tmp/.ICE-unix/2364,unix/kaibuchisoma-Ubuntu:/tmp/.ICE-unix/2364', 'INVOCATION_ID': '1e193b5a6dd94df588378a4773580168', 'PAPERSIZE': 'letter', 'XDG_MENU_PREFIX': 'gnome-', 'LC_ADDRESS': 'en_US.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': ':1', 'LANG': 'ja_JP.UTF-8', 'XDG_CURRENT_DESKTOP': 'ubuntu:GNOME', 'LC_TELEPHONE': 'en_US.UTF-8', 'XMODIFIERS': '@im=ibus', 'XDG_SESSION_DESKTOP': 'ubuntu', 'XAUTHORITY': '/run/user/1000/gdm/Xauthority', 'SSH_AGENT_LAUNCHER': 'gnome-keyring', 'SSH_AUTH_SOCK': '/run/user/1000/keyring/ssh', 'SHELL': '/bin/bash', 'LC_NAME': 'en_US.UTF-8', 'TERMINATOR_UUID': 'urn:uuid:d0ba7a92-7718-4b93-b7ea-7f506e6311b9', 'QT_ACCESSIBILITY': '1', 'GDMSESSION': 'ubuntu', 'LC_MEASUREMENT': 'en_US.UTF-8', 'GPG_AGENT_INFO': '/run/user/1000/gnupg/S.gpg-agent:0:1', 'GJS_DEBUG_OUTPUT': 'stderr', 'LC_IDENTIFICATION': 'en_US.UTF-8', 'QT_IM_MODULE': 'ibus', 'PWD': '/home/kaibuchisoma/test_ws/build/experiment_python', 'LC_ALL': 'en_US.UTF-8', 'XDG_CONFIG_DIRS': '/etc/xdg/xdg-ubuntu:/etc/xdg', 'XDG_DATA_DIRS': '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop', 'LC_NUMERIC': 'en_US.UTF-8', 'LC_PAPER': 'en_US.UTF-8', 'COLCON': '1', 'VTE_VERSION': '6800', 'PYTHONPATH': '/home/kaibuchisoma/test_ws/build/experiment_python/prefix_override:/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages:'}, 'shell': False}
+[0.801944] (-) TimerEvent: {}
+[0.902310] (-) TimerEvent: {}
+[1.002688] (-) TimerEvent: {}
+[1.015626] (experiment_python) StdoutLine: {'line': b'running egg_info\n'}
+[1.015917] (experiment_python) StdoutLine: {'line': b'writing ../../build/experiment_python/experiment_python.egg-info/PKG-INFO\n'}
+[1.016149] (experiment_python) StdoutLine: {'line': b'writing dependency_links to ../../build/experiment_python/experiment_python.egg-info/dependency_links.txt\n'}
+[1.016351] (experiment_python) StdoutLine: {'line': b'writing entry points to ../../build/experiment_python/experiment_python.egg-info/entry_points.txt\n'}
+[1.016548] (experiment_python) StdoutLine: {'line': b'writing requirements to ../../build/experiment_python/experiment_python.egg-info/requires.txt\n'}
+[1.016665] (experiment_python) StdoutLine: {'line': b'writing top-level names to ../../build/experiment_python/experiment_python.egg-info/top_level.txt\n'}
+[1.018295] (experiment_python) StdoutLine: {'line': b"reading manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'\n"}
+[1.019184] (experiment_python) StdoutLine: {'line': b"writing manifest file '../../build/experiment_python/experiment_python.egg-info/SOURCES.txt'\n"}
+[1.019316] (experiment_python) StdoutLine: {'line': b'running build\n'}
+[1.019418] (experiment_python) StdoutLine: {'line': b'running build_py\n'}
+[1.019967] (experiment_python) StdoutLine: {'line': b'running install\n'}
+[1.020111] (experiment_python) StderrLine: {'line': b'/usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.\n'}
+[1.020239] (experiment_python) StderrLine: {'line': b'  warnings.warn(\n'}
+[1.020396] (experiment_python) StdoutLine: {'line': b'running install_lib\n'}
+[1.022373] (experiment_python) StdoutLine: {'line': b'byte-compiling /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python/Drive_Controller.py to Drive_Controller.cpython-310.pyc\n'}
+[1.023182] (experiment_python) StderrLine: {'line': b"Sorry: IndentationError: expected an indented block after 'elif' statement on line 81 (Drive_Controller.py, line 89)\n"}
+[1.023339] (experiment_python) StdoutLine: {'line': b'running install_data\n'}
+[1.023964] (experiment_python) StdoutLine: {'line': b'running install_egg_info\n'}
+[1.026488] (experiment_python) StdoutLine: {'line': b"removing '/home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[1.026898] (experiment_python) StdoutLine: {'line': b'Copying ../../build/experiment_python/experiment_python.egg-info to /home/kaibuchisoma/test_ws/install/experiment_python/lib/python3.10/site-packages/experiment_python-0.0.0-py3.10.egg-info\n'}
+[1.027927] (experiment_python) StdoutLine: {'line': b'running install_scripts\n'}
+[1.053820] (experiment_python) StdoutLine: {'line': b'Installing Collect_Controller script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python\n'}
+[1.054250] (experiment_python) StdoutLine: {'line': b'Installing Drive_Controller script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python\n'}
+[1.054431] (experiment_python) StdoutLine: {'line': b'Installing communicateWebSockets_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python\n'}
+[1.054605] (experiment_python) StdoutLine: {'line': b'Installing communicateWiFiUDP_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python\n'}
+[1.054821] (experiment_python) StdoutLine: {'line': b'Installing communicateWiFi_ESP32 script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python\n'}
+[1.054989] (experiment_python) StdoutLine: {'line': b'Installing webserver script to /home/kaibuchisoma/test_ws/install/experiment_python/lib/experiment_python\n'}
+[1.055523] (experiment_python) StdoutLine: {'line': b"writing list of installed files to '/home/kaibuchisoma/test_ws/build/experiment_python/install.log'\n"}
+[1.080002] (experiment_python) CommandEnded: {'returncode': 0}
+[1.102806] (-) TimerEvent: {}
+[1.129279] (experiment_python) JobEnded: {'identifier': 'experiment_python', 'rc': 0}
+[1.130147] (-) EventReactorShutdown: {}

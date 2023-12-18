@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="" onsubmit="sendMessage(event)">
+      <input type="text" id="messageText" autocomplete="off" />
+      <button>Send</button>
+    </form>
+    <ul id="messages"></ul>
+    <p id="last"></p>
+    <script>
+      temp = 0;
+
+      function send_state() {
+        fetch("/stream", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data: temp }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            document.getElementById("last").innerHTML = "きたああ";
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            document.getElementById("last").innerHTML =
+              "あああああああああああああああラー";
+          });
+
+        temp++;
+        document.getElementById("last").innerHTML = temp;
+      }
+      // temp = 0;
+      window.setInterval(send_state, 100);
+      // function send_state() {
+      //   xhr.open("POST", "/stream", true);
+      //   xhr.setRequestHeader("Content-Type", "application/json");
+      //   var request = JSON.stringify({ data: temp });
+      //   xhr.send(request);
+      //   temp++;
+
+      //   document.getElementById("last").innerHTML = temp;
+      // }
+
+      // window.onload = function () {
+      //   xhr = new XMLHttpRequest();
+
+      //   // サーバからのデータ受信を行った際の動作
+      //   xhr.onload = function (e) {
+      //     if (xhr.readyState === 4) {
+      //       if (xhr.status === 200) {
+      //         var answer = document.getElementById("answer");
+      //         answer.value = xhr.responseText;
+      //       }
+      //     }
+      //   };
+      // };
+    </script>
+  </body>
+</html>

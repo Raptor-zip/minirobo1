@@ -22,12 +22,12 @@ def generate_launch_description():
                 parameters=[{"device_id": 0}],
                 remappings=[("/joy", "/joy1")],
             ),
-            # Node(
-            #     package="joy",
-            #     executable="joy_node",
-            #     parameters=[{"device_id": 0}],
-            #     remappings=[("/joy", "/joy2")],
-            # ),
+            Node(
+                package="joy",
+                executable="joy_node",
+                parameters=[{"device_id": 0}],
+                remappings=[("/joy", "/joy2")],
+            ),
             # Node(
             #     package="joy",
             #     executable="joy_node",
