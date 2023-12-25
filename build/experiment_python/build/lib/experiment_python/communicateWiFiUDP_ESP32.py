@@ -11,7 +11,7 @@ import ipget
 import socket
 motor_speed = [0, 0, 0, 0]
 reception_json = {
-    "raw_distance": 0,
+    "raw_distance": 1000,
     "raw_angle": 0,
     "battery_voltage": 0,
     "wifi_signal_strength": 0
@@ -77,7 +77,7 @@ def udp_reception():
         try:
             # データを受信
             data, addr = local_udp_socket.recvfrom(1024)
-            print(f"Received: {data.decode('utf-8')}", flush=True)
+            print(f"           {data.decode('utf-8')}", flush=True)
             reception_json_temp = json.loads(data.decode('utf-8'))
             reception_json.update(reception_json_temp)
         except Exception as e:
@@ -123,7 +123,11 @@ class MinimalSubscriber(Node):
     motor3_speed = 0
     normal_max_motor_speed = 230  # 自動運転時の最高速度
 
-    distance_adjust = -10  # パラメーター調整必要
+    straight_P_gain = 1  # 直進中に距離センサーにかけられるPゲイン
+    straight_turn_P_gain = 1  # 直進中に補助するときに回転するときのPゲイン
+    straight_distance_to_wall = 30  # 止まるときの壁までの距離
+    turn_P_gain = 1  # 旋回中に角度センサーにかけられるPゲイン
+    distance_adjust = -10  # ロボットの前面から距離センサーまでの距離 (マイナス)
     current_distance = 0
     angle_adjust = 0
     current_angle = 0
@@ -167,9 +171,9 @@ class MinimalSubscriber(Node):
 
         # 0.001でも試す！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
         self.timer_0001 = self.create_timer(0.01, self.timer_callback_001)
-        self.timer_0016 = self.create_timer(0.016, self.timer_callback_0016)
+        self.timer_0016 = self.create_timer(0.033, self.timer_callback_0033)
 
-    def timer_callback_0016(self):
+    def timer_callback_0033(self):
         global wifi_ssid, esp32_ip
 
         msg = String()
@@ -183,9 +187,8 @@ class MinimalSubscriber(Node):
             "motor1_speed": self.motor1_speed,
             "motor2_speed": self.motor2_speed,
             "motor3_speed": self.motor3_speed,
-            "distance": reception_json["raw_distance"] + self.distance_adjust,
-            # "angle":,
-            "raw_angle": 0,
+            "distance_value": reception_json["raw_distance"] + self.distance_adjust,
+            "angle_value": self.current_angle,
             "start_time": self.start_time
         }
         msg.data = json.dumps(send_json)
@@ -215,8 +218,8 @@ class MinimalSubscriber(Node):
         elif angle_difference < 0:
             # 右旋回
             print("右旋回", flush=True)
-            self.motor1_speed = angle_difference * -2  # パラメーター調整必須
-            self.motor2_speed = angle_difference * 2  # パラメーター調整必須
+            self.motor1_speed = angle_difference * self.turn_P_gain * -1
+            self.motor2_speed = angle_difference * self.turn_P_gain
             if self.motor1_speed < -1 * self.normal_max_motor_speed:
                 self.motor1_speed = -1 * self.normal_max_motor_speed - self.axes_3 + self.axes_1
                 if self.motor1_speed < -1 * 255:
@@ -238,8 +241,8 @@ class MinimalSubscriber(Node):
         else:
             # 左旋回
             print("左旋回", flush=True)
-            self.motor1_speed = angle_difference * -2  # パラメーター調整必須
-            self.motor2_speed = angle_difference * 2  # パラメーター調整必須
+            self.motor1_speed = angle_difference * self.turn_P_gain * -1
+            self.motor2_speed = angle_difference * self.turn_P_gain
             if self.motor1_speed > self.normal_max_motor_speed:
                 self.motor1_speed = self.normal_max_motor_speed + self.axes_3 - self.axes_1
                 if self.motor1_speed > 255:
@@ -259,8 +262,8 @@ class MinimalSubscriber(Node):
                     self.motor2_speed = 255
 
     def straight(self, target_angle):
-        if self.current_distance > 30:  # パラメーター調整必須
-            distance = self.current_distance * 1  # パラメーター調整必須
+        if self.current_distance > self.straight_distance_to_wall:
+            distance = self.current_distance * self.straight_P_gain
             if distance > self.normal_max_motor_speed:
                 distance = self.normal_max_motor_speed
 
@@ -295,10 +298,12 @@ class MinimalSubscriber(Node):
                 # 壁と平行じゃないなら
                 if angle_difference > 0:
                     # 右に傾いているなら
-                    self.motor1_speed = self.motor1_speed - angle_difference * 2  # パラメーター調整必要
+                    self.motor1_speed = self.motor1_speed - angle_difference * \
+                        self.straight_turn_P_gain
                 else:
                     # 左に傾いているなら
-                    self.motor2_speed = self.motor2_speed + angle_difference * 2  # パラメーター調整必要
+                    self.motor2_speed = self.motor2_speed + \
+                        angle_difference * self.straight_turn_P_gain
 
                 if self.motor1_speed > 255:
                     self.motor1_speed = 255
@@ -372,8 +377,8 @@ class MinimalSubscriber(Node):
 
         if self.state == 0:
             # 走行補助がオフなら
-            self.motor1_speed = int(joy.axes[1]*256)
-            self.motor2_speed = int(joy.axes[3]*256)
+            self.motor1_speed = int(joy.axes[1]*256*0.5)
+            self.motor2_speed = int(joy.axes[3]*256*0.5)
 
         if joy.buttons[6] == 1:
             # 走行補助強制停止
